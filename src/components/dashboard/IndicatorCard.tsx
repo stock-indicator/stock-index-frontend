@@ -85,6 +85,9 @@ export function IndicatorCard({ indicator, generatedAt, historySeries }: Indicat
         )}
       </div>
       <footer className={styles.meta}>
+        {indicator.description && (
+          <p className={styles.description}>{indicator.description}</p>
+        )}
         {indicator.threshold && (
           <span className={styles.metaItem}>Threshold: {indicator.threshold}</span>
         )}

@@ -11,6 +11,7 @@ export interface IndicatorResult {
   raw_value?: string | null
   pure_value?: Array<Record<string, unknown>>
   topics?: string[]
+  description?: string | null
 }
 
 export interface IndicatorListResponse {

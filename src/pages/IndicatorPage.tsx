@@ -85,8 +85,8 @@ export function IndicatorPage() {
             <StatusBadge status={indicator?.status} />
           </div>
 
-          {indicator?.notes && (
-            <p className={styles.subtitle}>{indicator.notes}</p>
+          {indicator?.description && (
+            <p className={styles.subtitle}>{indicator.description}</p>
           )}
         </div>
 
