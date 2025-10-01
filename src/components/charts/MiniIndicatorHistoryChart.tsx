@@ -16,7 +16,7 @@ const tooltipFormatter = (value: number | string) => {
 
 export function MiniIndicatorHistoryChart({ series }: MiniIndicatorHistoryChartProps) {
   const data = series.map((point) => ({
-    date: point.date,
+    date: new Date(point.date).getTime(),
     value: typeof point.summary_value === 'number' ? point.summary_value : null,
   }))
 
@@ -32,6 +32,9 @@ export function MiniIndicatorHistoryChart({ series }: MiniIndicatorHistoryChartP
           <CartesianGrid vertical={false} stroke="rgba(255,255,255,0.08)" />
           <XAxis
             dataKey="date"
+            type="number"
+            scale="time"
+            domain={['dataMin', 'dataMax']}
             stroke="transparent"
             tickLine={false}
             axisLine={false}

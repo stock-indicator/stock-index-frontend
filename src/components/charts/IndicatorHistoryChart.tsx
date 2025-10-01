@@ -21,7 +21,7 @@ interface IndicatorHistoryChartProps {
 }
 
 interface ChartDatum {
-  date: string
+  date: number
   value: number | null
   status?: IndicatorStatus | null
 }
@@ -37,7 +37,7 @@ interface HistoryDotProps extends DotProps {
 
 function buildChartData(series: IndicatorHistoryPoint[]): ChartDatum[] {
   return series.map((point) => ({
-    date: point.date,
+    date: new Date(point.date).getTime(),
     value: typeof point.summary_value === 'number' ? point.summary_value : null,
     status: point.status,
   }))
@@ -96,11 +96,14 @@ export function IndicatorHistoryChart({ series, height = 320 }: IndicatorHistory
           <CartesianGrid stroke="rgba(255,255,255,0.08)" vertical={false} />
           <XAxis
             dataKey="date"
+            type="number"
+            scale="time"
+            domain={['dataMin', 'dataMax']}
             stroke="rgba(255,255,255,0.55)"
             tickLine={false}
             axisLine={false}
             minTickGap={32}
-            tickFormatter={(value: string) => format(new Date(value), 'MMM d, yyyy')}
+            tickFormatter={(value: number) => format(new Date(value), 'MMM d, yyyy')}
           />
           <YAxis
             stroke="rgba(255,255,255,0.55)"
@@ -124,4 +127,3 @@ export function IndicatorHistoryChart({ series, height = 320 }: IndicatorHistory
     </div>
   )
 }
-
