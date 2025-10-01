@@ -30,14 +30,12 @@ export function DashboardPage() {
   const {
     data: indicatorsData,
     isLoading: isIndicatorsLoading,
-    isFetching: isIndicatorsFetching,
     isError: isIndicatorsError,
   } = useIndicatorsQuery()
   const {
     data: summaryData,
     isLoading: isSummaryLoading,
     isError: isSummaryError,
-    isFetching: isSummaryFetching,
   } = useMarketSummaryQuery()
   const { mutate: runManualRefresh, isPending: isRefreshing } = useManualRefreshMutation()
 
@@ -92,7 +90,6 @@ export function DashboardPage() {
 
   const isLoading = isIndicatorsLoading
   const isError = isIndicatorsError
-  const isFetching = isIndicatorsFetching || isSummaryFetching
 
   return (
     <div className={styles.wrapper}>
