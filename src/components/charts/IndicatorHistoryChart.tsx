@@ -104,6 +104,7 @@ export function IndicatorHistoryChart({ series, height = 320 }: IndicatorHistory
             axisLine={false}
             minTickGap={32}
             tickFormatter={(value: number) => format(new Date(value), 'MMM d, yyyy')}
+            allowDataOverflow={true}
           />
           <YAxis
             stroke="rgba(255,255,255,0.55)"

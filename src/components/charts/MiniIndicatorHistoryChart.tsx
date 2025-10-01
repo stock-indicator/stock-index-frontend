@@ -40,6 +40,7 @@ export function MiniIndicatorHistoryChart({ series }: MiniIndicatorHistoryChartP
             axisLine={false}
             minTickGap={24}
             tickFormatter={(value) => format(new Date(value), 'MM/dd')}
+            allowDataOverflow={true}
           />
           <YAxis
             stroke="transparent"
