@@ -1,10 +1,12 @@
-import { keepPreviousData, useQueries, useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQueries, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import {
   fetchIndicator,
   fetchIndicatorHistory,
   fetchIndicators,
   fetchSummary,
+  refreshIndicator,
+  refreshManual,
   type FetchHistoryParams,
 } from './queries'
 
@@ -54,5 +56,29 @@ export function useBulkIndicatorHistoryQueries(
       queryFn: () => fetchIndicatorHistory({ slug, lookbackDays }),
       enabled: enabled && Boolean(slug),
     })),
+  })
+}
+
+export function useManualRefreshMutation() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: refreshManual,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['indicators', 'latest'] })
+      queryClient.invalidateQueries({ queryKey: ['summary', 'latest'] })
+    },
+  })
+}
+
+export function useIndicatorRefreshMutation() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: refreshIndicator,
+    onSuccess: (_, slug) => {
+      queryClient.invalidateQueries({ queryKey: ['indicator', slug] })
+      queryClient.invalidateQueries({ queryKey: ['indicator-history', slug] })
+    },
   })
 }

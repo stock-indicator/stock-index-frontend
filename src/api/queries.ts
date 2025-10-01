@@ -36,3 +36,21 @@ export async function fetchSummary() {
   const { data } = await apiClient.get<MarketSummaryResponse>('/summary')
   return data
 }
+
+export async function refreshManual() {
+  const { data } = await apiClient.post('/refresh', {
+    mode: 'manual',
+    lookback_days: 365,
+    indicator_slug: null,
+  })
+  return data
+}
+
+export async function refreshIndicator(slug: string) {
+  const { data } = await apiClient.post('/refresh', {
+    mode: 'manual',
+    lookback_days: 365,
+    indicator_slug: slug,
+  })
+  return data
+}

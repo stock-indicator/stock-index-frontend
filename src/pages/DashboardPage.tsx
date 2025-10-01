@@ -4,10 +4,12 @@ import type { IndicatorHistoryPoint, IndicatorResult } from '../api/types'
 import {
   useBulkIndicatorHistoryQueries,
   useIndicatorsQuery,
+  useManualRefreshMutation,
   useMarketSummaryQuery,
 } from '../api/hooks'
 import type { FetchHistoryParams } from '../api/queries'
 import { IndicatorCard } from '../components/dashboard/IndicatorCard'
+import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import { TimeRangePicker } from '../components/ui/TimeRangePicker'
 import { TogglePillGroup } from '../components/ui/TogglePillGroup'
@@ -25,11 +27,22 @@ export function DashboardPage() {
   const [viewMode, setViewMode] = useState<DashboardViewMode>('list')
   const [timeRange, setTimeRange] = useState<TimeRangeId>(DEFAULT_RANGE)
 
-  const indicatorsQuery = useIndicatorsQuery()
-  const summaryQuery = useMarketSummaryQuery()
+  const {
+    data: indicatorsData,
+    isLoading: isIndicatorsLoading,
+    isFetching: isIndicatorsFetching,
+    isError: isIndicatorsError,
+  } = useIndicatorsQuery()
+  const {
+    data: summaryData,
+    isLoading: isSummaryLoading,
+    isError: isSummaryError,
+    isFetching: isSummaryFetching,
+  } = useMarketSummaryQuery()
+  const { mutate: runManualRefresh, isPending: isRefreshing } = useManualRefreshMutation()
 
-  const indicators = indicatorsQuery.data?.indicators ?? EMPTY_INDICATORS
-  const generatedAt = indicatorsQuery.data?.generated_at
+  const indicators = indicatorsData?.indicators ?? EMPTY_INDICATORS
+  const generatedAt = indicatorsData?.generated_at
 
   const sortedIndicators = useMemo(
     () => [...indicators].sort(sortIndicators),
@@ -49,9 +62,9 @@ export function DashboardPage() {
     [groupedByCategory],
   )
 
-  const totalIndicators = summaryQuery.data?.summary.total_available ?? indicators.length
-  const triggeredHigh = summaryQuery.data?.summary.triggered_available ?? 0
-  const byCategory = summaryQuery.data?.summary.by_category ?? {}
+  const totalIndicators = summaryData?.summary.total_available ?? indicators.length
+  const triggeredHigh = summaryData?.summary.triggered_available ?? 0
+  const byCategory = summaryData?.summary.by_category ?? {}
 
   const lookbackDays = getLookbackDays(timeRange)
   const historyParams = useMemo<FetchHistoryParams[]>(
@@ -77,8 +90,9 @@ export function DashboardPage() {
     return map
   }, [historyParams, historyQueries])
 
-  const isLoading = indicatorsQuery.isLoading
-  const isError = indicatorsQuery.isError
+  const isLoading = isIndicatorsLoading
+  const isError = isIndicatorsError
+  const isFetching = isIndicatorsFetching || isSummaryFetching
 
   return (
     <div className={styles.wrapper}>
@@ -99,6 +113,29 @@ export function DashboardPage() {
             value={viewMode}
             onChange={setViewMode}
           />
+          <Button
+            variant="icon"
+            onClick={() => runManualRefresh()}
+            disabled={isRefreshing}
+            title="Refresh data"
+            className={isRefreshing ? styles.spinning : ''}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="1 4 1 10 7 10"></polyline>
+              <polyline points="23 20 23 14 17 14"></polyline>
+              <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path>
+            </svg>
+          </Button>
         </div>
       </header>
 
@@ -111,9 +148,9 @@ export function DashboardPage() {
               : undefined
           }
         >
-          {summaryQuery.isLoading ? (
+          {isSummaryLoading ? (
             <p className={styles.placeholderCopy}>Loading summary…</p>
-          ) : summaryQuery.isError ? (
+          ) : isSummaryError ? (
             <p className={styles.errorCopy}>Unable to load summary stats right now.</p>
           ) : (
             <div className={styles.summaryContent}>
@@ -196,6 +233,3 @@ export function DashboardPage() {
     </div>
   )
 }
-
-
-

@@ -5,10 +5,12 @@ import { useParams } from "react-router-dom";
 import {
   useIndicatorDetailQuery,
   useIndicatorHistoryQuery,
+  useIndicatorRefreshMutation,
 } from "../api/hooks";
 
 import { IndicatorHistoryChart } from "../components/charts/IndicatorHistoryChart";
 
+import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
 
 import { StatusBadge } from "../components/ui/StatusBadge";
@@ -65,6 +67,9 @@ export function IndicatorPage() {
     lookbackDays,
   });
 
+  const { mutate: runIndicatorRefresh, isPending: isRefreshing } =
+    useIndicatorRefreshMutation();
+
   const indicator = detailQuery.data;
 
   const historySeries = historyQuery.data?.series ?? [];
@@ -94,6 +99,30 @@ export function IndicatorPage() {
           <span className={styles.controlLabel}>Time range</span>
 
           <TimeRangePicker value={timeRange} onChange={setTimeRange} />
+
+          <Button
+            variant="icon"
+            onClick={() => runIndicatorRefresh(slug ?? "")}
+            disabled={isRefreshing || !slug}
+            title="Refresh indicator"
+            className={isRefreshing ? styles.spinning : ''}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="1 4 1 10 7 10"></polyline>
+              <polyline points="23 20 23 14 17 14"></polyline>
+              <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path>
+            </svg>
+          </Button>
         </div>
       </header>
 
