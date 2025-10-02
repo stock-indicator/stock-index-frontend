@@ -4,12 +4,12 @@ import type { IndicatorHistoryPoint, IndicatorResult } from '../api/types'
 import {
   useBulkIndicatorHistoryQueries,
   useIndicatorsQuery,
-  useManualRefreshMutation,
+  // useManualRefreshMutation,
   useMarketSummaryQuery,
 } from '../api/hooks'
 import type { FetchHistoryParams } from '../api/queries'
 import { IndicatorCard } from '../components/dashboard/IndicatorCard'
-import { Button } from '../components/ui/Button'
+// import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import { TimeRangePicker } from '../components/ui/TimeRangePicker'
 import { TogglePillGroup } from '../components/ui/TogglePillGroup'
@@ -21,7 +21,7 @@ import styles from './DashboardPage.module.css'
 type DashboardViewMode = 'list' | 'category'
 
 const EMPTY_INDICATORS: IndicatorResult[] = []
-const DEFAULT_RANGE: TimeRangeId = '3M'
+const DEFAULT_RANGE: TimeRangeId = '1Y'
 
 export function DashboardPage() {
   const [viewMode, setViewMode] = useState<DashboardViewMode>('list')
@@ -37,7 +37,7 @@ export function DashboardPage() {
     isLoading: isSummaryLoading,
     isError: isSummaryError,
   } = useMarketSummaryQuery()
-  const { mutate: runManualRefresh, isPending: isRefreshing } = useManualRefreshMutation()
+  // const { mutate: runManualRefresh, isPending: isRefreshing } = useManualRefreshMutation()
 
   const indicators = indicatorsData?.indicators ?? EMPTY_INDICATORS
   const generatedAt = indicatorsData?.generated_at
@@ -110,7 +110,7 @@ export function DashboardPage() {
             value={viewMode}
             onChange={setViewMode}
           />
-          <Button
+          {/* <Button
             variant="icon"
             onClick={() => runManualRefresh()}
             disabled={isRefreshing}
@@ -132,7 +132,7 @@ export function DashboardPage() {
               <polyline points="23 20 23 14 17 14"></polyline>
               <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path>
             </svg>
-          </Button>
+          </Button> */}
         </div>
       </header>
 

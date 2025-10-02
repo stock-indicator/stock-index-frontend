@@ -70,6 +70,7 @@ export function MiniIndicatorHistoryChart({ series }: MiniIndicatorHistoryChartP
             dot={false}
             activeDot={{ r: 4, strokeWidth: 1.5, stroke: '#0f1629', fill: '#7aa2ff' }}
             isAnimationActive={false}
+            connectNulls
           />
         </LineChart>
       </ResponsiveContainer>

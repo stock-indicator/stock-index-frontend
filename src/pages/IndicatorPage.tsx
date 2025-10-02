@@ -5,12 +5,11 @@ import { useParams } from "react-router-dom";
 import {
   useIndicatorDetailQuery,
   useIndicatorHistoryQuery,
-  useIndicatorRefreshMutation,
 } from "../api/hooks";
 
 import { IndicatorHistoryChart } from "../components/charts/IndicatorHistoryChart";
 
-import { Button } from "../components/ui/Button";
+// 
 import { Card } from "../components/ui/Card";
 
 import { StatusBadge } from "../components/ui/StatusBadge";
@@ -29,7 +28,7 @@ import {
 
 import styles from "./IndicatorPage.module.css";
 
-const DEFAULT_RANGE: TimeRangeId = "6M";
+const DEFAULT_RANGE: TimeRangeId = "1Y";
 
 function extractDetailRows(indicator?: IndicatorResult) {
   if (!indicator?.pure_value?.length) {
@@ -67,8 +66,7 @@ export function IndicatorPage() {
     lookbackDays,
   });
 
-  const { mutate: runIndicatorRefresh, isPending: isRefreshing } =
-    useIndicatorRefreshMutation();
+  
 
   const indicator = detailQuery.data;
 
@@ -100,7 +98,7 @@ export function IndicatorPage() {
 
           <TimeRangePicker value={timeRange} onChange={setTimeRange} />
 
-          <Button
+          {/* <Button
             variant="icon"
             onClick={() => runIndicatorRefresh(slug ?? "")}
             disabled={isRefreshing || !slug}
@@ -122,7 +120,7 @@ export function IndicatorPage() {
               <polyline points="23 20 23 14 17 14"></polyline>
               <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path>
             </svg>
-          </Button>
+          </Button> */}
         </div>
       </header>
 

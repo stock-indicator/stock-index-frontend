@@ -38,19 +38,22 @@ export async function fetchSummary() {
 }
 
 export async function refreshManual() {
-  const { data } = await apiClient.post('/refresh', {
-    mode: 'manual',
-    lookback_days: 365,
-    indicator_slug: null,
-  })
-  return data
+  // const { data } = await apiClient.post('/refresh', {
+  //   mode: 'manual',
+  //   lookback_days: 365,
+  //   indicator_slug: null,
+  // })
+  // return data
+  return Promise.resolve({ message: "Manual refresh is temporarily disabled." });
 }
 
 export async function refreshIndicator(slug: string) {
-  const { data } = await apiClient.post('/refresh', {
-    mode: 'manual',
-    lookback_days: 365,
-    indicator_slug: slug,
-  })
-  return data
+  // const { data } = await apiClient.post('/refresh', {
+  //   mode: 'manual',
+  //   lookback_days: 365,
+  //   indicator_slug: slug,
+  // })
+  // return data
+  console.log(`Refresh called for ${slug}, but is disabled.`);
+  return Promise.resolve({ message: `Indicator refresh for ${slug} is temporarily disabled.` });
 }
