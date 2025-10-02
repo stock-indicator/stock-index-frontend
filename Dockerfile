@@ -1,6 +1,11 @@
 # Stage 1: Build the React application
 FROM node:20-alpine AS build
 
+# Accept VITE_ENGINE_API_BASE_URL as a build argument
+ARG VITE_ENGINE_API_BASE_URL
+# Set it as an environment variable for the build process
+ENV VITE_ENGINE_API_BASE_URL=$VITE_ENGINE_API_BASE_URL
+
 WORKDIR /app
 
 # Copy package.json and package-lock.json
