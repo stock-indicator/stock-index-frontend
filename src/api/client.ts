@@ -1,7 +1,8 @@
 import axios from 'axios'
 
 const envBaseUrl = import.meta.env.VITE_ENGINE_API_BASE_URL?.trim()
-const fallbackBaseUrl = import.meta.env.DEV ? '/engine-api' : 'http://localhost:8000'
+// Production images serve the API from the same origin under /api (see nginx.conf)
+const fallbackBaseUrl = import.meta.env.DEV ? '/engine-api' : '/api'
 
 const baseURL = envBaseUrl && envBaseUrl.length > 0 ? envBaseUrl : fallbackBaseUrl
 

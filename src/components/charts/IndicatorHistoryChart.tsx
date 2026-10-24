@@ -1,5 +1,5 @@
 import { format } from 'date-fns'
-import type { DotProps } from 'recharts'
+import type { DotItemDotProps } from 'recharts'
 import {
   CartesianGrid,
   Line,
@@ -29,10 +29,6 @@ interface ChartDatum {
 interface CustomTooltipProps {
   active?: boolean
   payload?: Array<{ payload: ChartDatum }>
-}
-
-interface HistoryDotProps extends DotProps {
-  payload?: ChartDatum
 }
 
 function buildChartData(series: IndicatorHistoryPoint[]): ChartDatum[] {
@@ -74,12 +70,13 @@ function CustomTooltip({ active, payload }: CustomTooltipProps) {
   )
 }
 
-function HistoryDot({ cx, cy, payload }: HistoryDotProps) {
-  if (payload?.value == null || cx == null || cy == null) {
+function HistoryDot({ cx, cy, payload }: DotItemDotProps) {
+  const datum = payload as ChartDatum | undefined
+  if (datum?.value == null || cx == null || cy == null) {
     return null
   }
 
-  const color = getStatusColor(payload.status)
+  const color = getStatusColor(datum.status)
 
   return (
     <circle cx={cx} cy={cy} r={4} fill={color} stroke="#0f1629" strokeWidth={1.5} />
@@ -121,7 +118,7 @@ export function IndicatorHistoryChart({ series, height = 320 }: IndicatorHistory
             strokeWidth={2}
             connectNulls
             isAnimationActive={false}
-            dot={(props) => <HistoryDot {...(props as HistoryDotProps)} />}
+            dot={(props) => <HistoryDot {...props} />}
           />
         </LineChart>
       </ResponsiveContainer>
