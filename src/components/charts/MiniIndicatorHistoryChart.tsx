@@ -9,9 +9,9 @@ interface MiniIndicatorHistoryChartProps {
   series: IndicatorHistoryPoint[]
 }
 
-const tooltipFormatter = (value: number | string) => {
+const tooltipFormatter = (value: unknown) => {
   if (typeof value === 'number') return value.toLocaleString()
-  return value
+  return value == null ? '' : String(value)
 }
 
 export function MiniIndicatorHistoryChart({ series }: MiniIndicatorHistoryChartProps) {
@@ -52,7 +52,9 @@ export function MiniIndicatorHistoryChart({ series }: MiniIndicatorHistoryChartP
           <Tooltip
             isAnimationActive={false}
             formatter={tooltipFormatter}
-            labelFormatter={(label) => format(new Date(label), 'PPPP')}
+            labelFormatter={(label) =>
+              typeof label === 'number' ? format(new Date(label), 'PPPP') : label
+            }
             cursor={{ stroke: 'rgba(255,255,255,0.2)' }}
             contentStyle={{
               backgroundColor: 'rgba(15, 22, 41, 0.95)',
