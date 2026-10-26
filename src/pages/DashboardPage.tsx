@@ -14,7 +14,7 @@ import { Card } from '../components/ui/Card'
 import { TimeRangePicker } from '../components/ui/TimeRangePicker'
 import { TogglePillGroup } from '../components/ui/TogglePillGroup'
 import { groupIndicatorsByCategory, sortIndicators } from '../lib/indicators'
-import { getLookbackDays, type TimeRangeId } from '../lib/timeRanges'
+import { CARD_CHART_MAX_POINTS, getLookbackDays, type TimeRangeId } from '../lib/timeRanges'
 
 import styles from './DashboardPage.module.css'
 
@@ -62,6 +62,7 @@ export function DashboardPage() {
 
   const totalIndicators = summaryData?.summary.total_available ?? indicators.length
   const triggeredHigh = summaryData?.summary.triggered_available ?? 0
+  const triggeredLow = summaryData?.summary.low_available ?? 0
   const byCategory = summaryData?.summary.by_category ?? {}
 
   const lookbackDays = getLookbackDays(timeRange)
@@ -69,7 +70,7 @@ export function DashboardPage() {
     () =>
       sortedIndicators.reduce<FetchHistoryParams[]>((acc, indicator) => {
         if (indicator.slug) {
-          acc.push({ slug: indicator.slug, lookbackDays })
+          acc.push({ slug: indicator.slug, lookbackDays, maxPoints: CARD_CHART_MAX_POINTS })
         }
         return acc
       }, []),
@@ -160,13 +161,17 @@ export function DashboardPage() {
                   <p className={styles.headlineLabel}>Triggered (high)</p>
                   <p className={styles.headlineValueHighlight}>{triggeredHigh}</p>
                 </div>
+                <div>
+                  <p className={styles.headlineLabel}>Triggered (low)</p>
+                  <p className={styles.headlineValuePositive}>{triggeredLow}</p>
+                </div>
               </div>
               <div className={styles.summaryBreakdown}>
                 {Object.entries(byCategory).map(([category, breakdown]) => (
                   <div key={category} className={styles.summaryPill}>
                     <span className={styles.summaryPillLabel}>{category}</span>
                     <span className={styles.summaryPillValue}>
-                      H: {breakdown.high} | N: {breakdown.normal} | U: {breakdown.unavailable}
+                      H: {breakdown.high} | L: {breakdown.low ?? 0} | N: {breakdown.normal} | U: {breakdown.unavailable}
                     </span>
                   </div>
                 ))}

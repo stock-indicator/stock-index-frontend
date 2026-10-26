@@ -67,6 +67,12 @@
   color: var(--color-negative);
 }
 
+.headlineValuePositive {
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--color-positive);
+}
+
 .summaryBreakdown {
   display: flex;
   flex-wrap: wrap;

@@ -6,7 +6,7 @@ import { IndicatorHistoryChart } from '../components/charts/IndicatorHistoryChar
 import { Card } from '../components/ui/Card'
 import { StatusBadge } from '../components/ui/StatusBadge'
 import { TimeRangePicker } from '../components/ui/TimeRangePicker'
-import { getLookbackDays, type TimeRangeId } from '../lib/timeRanges'
+import { GRID_CHART_MAX_POINTS, getLookbackDays, type TimeRangeId } from '../lib/timeRanges'
 
 import styles from './AllHistoryPage.module.css'
 
@@ -25,6 +25,7 @@ export function AllHistoryPage() {
       indicators.map((indicator) => ({
         slug: indicator.slug,
         lookbackDays,
+        maxPoints: GRID_CHART_MAX_POINTS,
       })),
     [indicators, lookbackDays],
   )

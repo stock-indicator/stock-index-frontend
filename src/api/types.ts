@@ -41,6 +41,8 @@ export interface IndicatorHistoryResponse {
 
 export interface CategorySummaryBreakdown {
   high: number
+  // Absent from summaries written before indicators could report "low".
+  low?: number
   normal: number
   unavailable: number
 }
@@ -53,6 +55,7 @@ export interface MarketSummaryResponse {
     total_total: number
     triggered_available: number
     total_available: number
+    low_available?: number
     ratio_total: string
     ratio_available: string
     by_category: Record<string, CategorySummaryBreakdown>

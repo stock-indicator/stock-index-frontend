@@ -21,6 +21,7 @@ import type { IndicatorResult } from "../api/types";
 import { formatIndicatorStatus } from "../lib/indicators";
 
 import {
+  DETAIL_CHART_MAX_POINTS,
   TIME_RANGE_OPTIONS,
   getLookbackDays,
   type TimeRangeId,
@@ -64,6 +65,8 @@ export function IndicatorPage() {
     slug: slug ?? "",
 
     lookbackDays,
+
+    maxPoints: DETAIL_CHART_MAX_POINTS,
   });
 
   
@@ -127,7 +130,7 @@ export function IndicatorPage() {
       <section className={styles.layoutGrid}>
         <Card
           title="Historical trend"
-          description="Daily observations from the engine"
+          description="Observations from the engine. Long ranges are thinned to keep the chart fast; high and low signals are kept."
         >
           {historyQuery.isLoading ? (
             <p className={styles.placeholderCopy}>Loading history…</p>
