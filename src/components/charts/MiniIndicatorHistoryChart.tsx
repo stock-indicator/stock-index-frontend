@@ -2,6 +2,7 @@ import { ResponsiveContainer, LineChart, Line, Tooltip, YAxis, XAxis, CartesianG
 import { format } from 'date-fns'
 
 import type { IndicatorHistoryPoint } from '../../api/types'
+import { getDateTickFormat } from '../../lib/timeRanges'
 
 import styles from './MiniIndicatorHistoryChart.module.css'
 
@@ -24,6 +25,7 @@ export function MiniIndicatorHistoryChart({ series }: MiniIndicatorHistoryChartP
   if (!hasData) {
     return <div className={styles.empty}>No recent history</div>
   }
+  const tickFormat = getDateTickFormat(data[0].date, data[data.length - 1].date, true)
 
   return (
     <div className={styles.wrapper}>
@@ -39,7 +41,7 @@ export function MiniIndicatorHistoryChart({ series }: MiniIndicatorHistoryChartP
             tickLine={false}
             axisLine={false}
             minTickGap={24}
-            tickFormatter={(value) => format(new Date(value), 'MM/dd')}
+            tickFormatter={(value) => format(new Date(value), tickFormat)}
             allowDataOverflow={true}
           />
           <YAxis

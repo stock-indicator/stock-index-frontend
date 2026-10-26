@@ -37,10 +37,10 @@ export function useIndicatorDetailQuery(slug?: string) {
   })
 }
 
-export function useIndicatorHistoryQuery({ slug, lookbackDays }: FetchHistoryParams) {
+export function useIndicatorHistoryQuery({ slug, lookbackDays, maxPoints }: FetchHistoryParams) {
   return useQuery({
-    queryKey: ['indicator-history', slug, lookbackDays ?? 'all'],
-    queryFn: () => fetchIndicatorHistory({ slug, lookbackDays }),
+    queryKey: ['indicator-history', slug, lookbackDays ?? 'all', maxPoints ?? 'all'],
+    queryFn: () => fetchIndicatorHistory({ slug, lookbackDays, maxPoints }),
     enabled: Boolean(slug),
     placeholderData: keepPreviousData,
   })
@@ -51,9 +51,9 @@ export function useBulkIndicatorHistoryQueries(
   enabled = true,
 ) {
   return useQueries({
-    queries: items.map(({ slug, lookbackDays }) => ({
-      queryKey: ['indicator-history', slug, lookbackDays ?? 'all'],
-      queryFn: () => fetchIndicatorHistory({ slug, lookbackDays }),
+    queries: items.map(({ slug, lookbackDays, maxPoints }) => ({
+      queryKey: ['indicator-history', slug, lookbackDays ?? 'all', maxPoints ?? 'all'],
+      queryFn: () => fetchIndicatorHistory({ slug, lookbackDays, maxPoints }),
       enabled: enabled && Boolean(slug),
     })),
   })

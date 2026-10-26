@@ -19,13 +19,17 @@ export async function fetchIndicator(slug: string) {
 export interface FetchHistoryParams {
   slug: string
   lookbackDays?: number
+  maxPoints?: number
 }
 
-export async function fetchIndicatorHistory({ slug, lookbackDays }: FetchHistoryParams) {
+export async function fetchIndicatorHistory({ slug, lookbackDays, maxPoints }: FetchHistoryParams) {
   const { data } = await apiClient.get<IndicatorHistoryResponse>(
     `/indicators/${slug}/history`,
     {
-      params: lookbackDays ? { lookback_days: lookbackDays } : undefined,
+      params: {
+        ...(lookbackDays ? { lookback_days: lookbackDays } : {}),
+        ...(maxPoints ? { max_points: maxPoints } : {}),
+      },
     },
   )
 
